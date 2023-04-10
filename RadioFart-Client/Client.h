@@ -12,6 +12,7 @@ class Client
 public:
 	Client();
 	void connectClient();
+	void closeSocket();
 	int end();
 private:
 	int clientResult;

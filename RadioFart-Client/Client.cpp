@@ -37,19 +37,14 @@ Client::Client()
 	if (clientResult == SOCKET_ERROR)
 	{
 		std::cout << "Unable connect to server" << std::endl;
-		closesocket(connectSocket);
-		connectSocket = INVALID_SOCKET;
-		freeaddrinfo(addrResult);
-		WSACleanup();
+		closeSocket();
 		exit(1);
 	}
 	clientResult = send(connectSocket, sendBuffer, (int)strlen(sendBuffer), 0);
 	if (clientResult == SOCKET_ERROR)
 	{
 		std::cout << "send failed, result = " << clientResult << std::endl;
-		closesocket(connectSocket);
-		freeaddrinfo(addrResult);
-		WSACleanup();
+		closeSocket();
 		exit(1);
 	}
 	std::cout << "bytes sent: " << clientResult << std::endl;
@@ -58,9 +53,7 @@ Client::Client()
 	if (clientResult == SOCKET_ERROR)
 	{
 		std::cout << "shutdown result = " << clientResult << std::endl;
-		closesocket(connectSocket);
-		freeaddrinfo(addrResult);
-		WSACleanup();
+		closeSocket();
 		exit(1);
 	}
 }
@@ -85,11 +78,15 @@ void Client::connectClient()
 			std::cout << "recv failed with error" << std::endl;
 		}
 	} while (clientResult > 0);
+	clientResult = 0;
+	exit(0);
+}
+
+void Client::closeSocket()
+{
 	closesocket(connectSocket);
 	freeaddrinfo(addrResult);
 	WSACleanup();
-	clientResult = 0;
-	exit(0);
 }
 
 int Client::end()
