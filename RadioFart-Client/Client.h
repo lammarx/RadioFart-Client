@@ -1,23 +1,25 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-
 #include <iostream>
-#include <Windows.h>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+#include <SFML/Network.hpp>
+#include <SFML/Audio.hpp>
+#include <fstream>
+#include <string>
 
 class Client
 {
 public:
 	Client();
-	void connectClient();
-	void closeSocket();
-	int end();
+	void connect();
 private:
-	int clientResult;
-	SOCKET connectSocket;
-	char recvBuffer[512];
-	ADDRINFO* addrResult = NULL;
+	std::ifstream config;
+	sf::IpAddress server;
+	sf::UdpSocket socket;
+	unsigned short port;
+	char in[128];
+	size_t received;
+	sf::IpAddress sender;
+	unsigned short senderPort;
+	const char* out;
 };
 
